@@ -4,6 +4,7 @@ import com.resend.Resend;
 import com.resend.core.exception.ResendException;
 import com.resend.services.emails.model.CreateEmailOptions;
 import org.springframework.beans.factory.annotation.Value;
+import java.time.Year;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -48,7 +49,7 @@ public class EmailService {
                             📋 %s
                           </h1>
                           <p style="margin:6px 0 0; color:rgba(255,255,255,0.85); font-size:13px; font-weight:400;">
-                            Team Task Manager
+                            %s
                           </p>
                         </td>
                       </tr>
@@ -62,7 +63,7 @@ public class EmailService {
                       <tr>
                         <td style="padding:16px 40px 32px; text-align:center; border-top:1px solid #f0f2f5;">
                           <p style="margin:0; color:#94a3b8; font-size:12px; line-height:1.6;">
-                            &copy; 2025 %s &middot; All rights reserved<br>
+                            &copy; %s %s &middot; All rights reserved<br>
                             <a href="%s" style="color:#6366f1; text-decoration:none;">Visit Dashboard</a>
                           </p>
                         </td>
@@ -73,7 +74,7 @@ public class EmailService {
               </table>
             </body>
             </html>
-            """.formatted(title, fromName, bodyContent, fromName, frontendUrl);
+            """.formatted(title, fromName, fromName, bodyContent, Year.now().getValue(), fromName, frontendUrl);
     }
 
     // ─── OTP Email ───
@@ -347,7 +348,7 @@ public class EmailService {
     private void sendEmail(String to, String subject, String htmlContent) {
         try {
             CreateEmailOptions params = CreateEmailOptions.builder()
-                    .from(fromName + " <" + fromEmail + ">")
+                    .from("\"" + fromName + "\" <" + fromEmail + ">")
                     .to(to)
                     .subject(subject)
                     .html(htmlContent)
